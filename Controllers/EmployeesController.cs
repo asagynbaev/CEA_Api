@@ -17,7 +17,7 @@ namespace WebApi.Controllers
         }
 
         //[Authorize(Roles = Role.Admin)]
-        [HttpPost("employess")]
+        [HttpGet("get")]
         public IActionResult Get()
         {
             var result = _context.Employees.ToList();
