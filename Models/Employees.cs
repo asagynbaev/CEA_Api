@@ -12,6 +12,9 @@ namespace WebApi.Models
         public string Phone { get; set; }
         public int English { get; set; }
         public int Czech { get; set; }
+        public bool Hotels { get; set; }
+        public bool Buses { get; set; }
+        public bool Shops { get; set; }
         public int Insurance { get; set; }
         public int VisaType { get; set; }
         public string WorkExperience { get; set; }
