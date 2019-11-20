@@ -29,10 +29,18 @@ namespace WebApi.Controllers
         [HttpPost("saveemployer")]
         public async Task<IActionResult> SaveEmployer([FromBody]Employees employer)
         {
-            employer.CreatedAt = DateTime.Now;
-            _context.Employees.Add(employer);
-            await _context.SaveChangesAsync();
-            return Ok(employer);
+            try
+            {
+                employer.CreatedAt = DateTime.Now;
+                _context.Employees.Add(employer);
+                await _context.SaveChangesAsync();
+                return Ok(employer);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = "Error is" + ex.Message });
+            }
+            
         }
     }
 }
