@@ -66,9 +66,14 @@ namespace WebApi.Controllers
                 existingEmployee.Hotels = employees.Hotels;
                 existingEmployee.Buses = employees.Buses;
                 existingEmployee.Shops = employees.Shops;
+                existingEmployee.HotelsTrain = employees.HotelsTrain;
+                existingEmployee.BusesTrain = employees.BusesTrain;
+                existingEmployee.ShopsTrain = employees.ShopsTrain;
                 existingEmployee.Insurance = employees.Insurance;
                 existingEmployee.VisaType = employees.VisaType;
                 existingEmployee.WorkExperience = employees.WorkExperience;
+                existingEmployee.Cityzenship = employees.Cityzenship;
+                existingEmployee.Advert = employees.Advert;
 
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
