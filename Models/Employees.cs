@@ -24,6 +24,8 @@ namespace WebApi.Models
         public int Status { get; set; }
         public int Cityzenship { get; set; }
         public int Advert { get; set; }
-        public bool IsTrained { get; set; }
+        public bool HotelsTrain { get; set; }
+        public bool BusesTrain { get; set; }
+        public bool ShopsTrain { get; set; }
     }
 }
