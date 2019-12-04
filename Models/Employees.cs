@@ -22,5 +22,8 @@ namespace WebApi.Models
         public string WorkExperience { get; set; }
         public DateTime CreatedAt { get; set; }
         public int Status { get; set; }
+        public int Cityzenship { get; set; }
+        public int Advert { get; set; }
+        public bool IsTrained { get; set; }
     }
 }
