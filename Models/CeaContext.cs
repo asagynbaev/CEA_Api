@@ -6,7 +6,9 @@ namespace WebApi.Models
         public CeaContext(DbContextOptions<CeaContext> options) : base(options)         
         {         
         }       
-        public DbSet<Employees> Employees { get; set; }     
+        public DbSet<Employees> Employees { get; set; } 
+        public DbSet<Organisations> Organisations { get; set; }
+        public DbSet<HelpersModel> Helpers { get; set; }
     
     } 
 }
