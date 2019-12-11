@@ -52,7 +52,7 @@ namespace WebApi.Controllers
                 if(helpers == null)
                     return BadRequest();
                 
-                existingHelper.Name = helpers.Name;
+                existingHelper.HelperName = helpers.HelperName;
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
             }
