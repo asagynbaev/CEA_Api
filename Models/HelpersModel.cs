@@ -7,6 +7,6 @@ namespace WebApi.Models
         [Key]
         public int Id { get; set; }
         public int HelperId { get; set; }
-        public string Name { get; set; }
+        public string HelperName { get; set; }
     }
 }
