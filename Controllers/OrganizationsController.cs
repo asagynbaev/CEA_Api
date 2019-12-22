@@ -59,7 +59,10 @@ namespace WebApi.Controllers
                 if(helpers == null)
                     return BadRequest();
                 
-                //existingHelper.HelperName = helpers.HelperName;
+                existingHelper.Name = helpers.Name;
+                existingHelper.Address = helpers.Address;
+                existingHelper.DressCode = helpers.DressCode;
+                existingHelper.Phone = helpers.Phone;
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
             }
