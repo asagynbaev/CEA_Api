@@ -20,14 +20,14 @@ namespace WebApi.Controllers
         }
 
         //[Authorize(Roles = Role.Admin)]
-        [HttpGet("get")]
+        [HttpGet]
         public IActionResult Get()
         {
             var result = _context.Employees.ToList();
             return Ok(result);
         }
 
-        [HttpPost("saveemployee")]
+        [HttpPost]
         public async Task<IActionResult> SaveEmployer([FromBody]Employees employer)
         {
             try
