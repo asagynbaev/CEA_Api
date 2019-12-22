@@ -19,6 +19,13 @@ namespace WebApi.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public IActionResult Get()
+        {
+            var result = _context.Organizations.ToList();
+            return Ok(result);
+        }
+
         //[Authorize(Roles = Role.Admin)]
         [HttpGet("{id}")]
         public IActionResult Get(int id)
