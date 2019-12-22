@@ -20,10 +20,10 @@ namespace WebApi.Controllers
         }
 
         //[Authorize(Roles = Role.Admin)]
-        [HttpGet]
-        public IActionResult Get()
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
         {
-            var result = _context.Organizations.ToList();
+            var result = _context.Organizations.Where(x => x.CategoryId == id).ToList();
             return Ok(result);
         }
 

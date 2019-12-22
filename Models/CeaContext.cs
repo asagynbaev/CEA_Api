@@ -9,6 +9,7 @@ namespace WebApi.Models
         public DbSet<Employees> Employees { get; set; } 
         public DbSet<Organizations> Organizations { get; set; }
         public DbSet<HelpersModel> Helpers { get; set; }
+        public DbSet<Positions> Positions { get; set; }
     
     } 
 }
