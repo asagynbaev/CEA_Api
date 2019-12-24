@@ -7,6 +7,5 @@ namespace WebApi.Models
         [Key]
         public int Id { get; set; }
         public int positionId { get; set; }
-
     }
 }

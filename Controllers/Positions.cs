@@ -9,10 +9,10 @@ namespace WebApi.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class OrganizationsController : ControllerBase
+    public class PositionsController : ControllerBase
     {
         private readonly CeaContext _context;
-        public OrganizationsController(CeaContext context)
+        public PositionsController(CeaContext context)
         {
             _context = context;
         }
@@ -20,7 +20,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var result = _context.Organizations.ToList();
+            var result = _context.Positions.ToList();
             return Ok(result);
         }
 
@@ -28,16 +28,16 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var result = _context.Organizations.Where(x => x.CategoryId == id).ToList();
+            var result = _context.Positions.Where(x => x.OrganizationId == id).ToList();
             return Ok(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveOrganization([FromBody]Organizations helper)
+        public async Task<IActionResult> SavePosition([FromBody]Positions helper)
         {
             try
             {
-                _context.Organizations.Add(helper);
+                _context.Positions.Add(helper);
                 await _context.SaveChangesAsync();
                 return Ok(helper);
             }
@@ -49,18 +49,16 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Int32 id, [FromBody]Organizations helpers)
+        public async Task<IActionResult> Update(Int32 id, [FromBody]Positions helpers)
         {
             try
             {
-                var existingHelper = await _context.Organizations.Where(x => x.Id == helpers.Id).SingleOrDefaultAsync();
+                var existingHelper = await _context.Positions.Where(x => x.Id == helpers.Id).SingleOrDefaultAsync();
                 if(helpers == null)
                     return BadRequest();
                 
-                existingHelper.Name = helpers.Name;
-                existingHelper.Address = helpers.Address;
-                existingHelper.DressCode = helpers.DressCode;
-                existingHelper.Phone = helpers.Phone;
+                existingHelper.PositionName = helpers.PositionName;
+                existingHelper.DefaultTime = helpers.DefaultTime;
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
             }
