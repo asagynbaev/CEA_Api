@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -33,11 +34,16 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SavePosition([FromBody]Positions helper)
+        public async Task<IActionResult> SavePosition([FromBody]PositionModel helper)
         {
             try
             {
-                _context.Positions.Add(helper);
+                Positions positions = new Positions();
+                positions.OrganizationId = helper.OrganizationId;
+                positions.PositionName = helper.PositionName;
+                helper.DefaultTime = helper.DefaultTime + ":00";
+                positions.DefaultTime = DateTime.ParseExact(helper.DefaultTime, "HH:mm:ss", CultureInfo.InvariantCulture);
+                _context.Positions.Add(positions);
                 await _context.SaveChangesAsync();
                 return Ok(helper);
             }
