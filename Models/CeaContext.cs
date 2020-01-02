@@ -10,6 +10,6 @@ namespace WebApi.Models
         public DbSet<Organizations> Organizations { get; set; }
         public DbSet<HelpersModel> Helpers { get; set; }
         public DbSet<Positions> Positions { get; set; }
-    
+        public DbSet<Shifts> Shifts { get; set; }
     } 
 }
