@@ -10,7 +10,7 @@ namespace WebApi.Models
         public int positionId { get; set; }
         public DateTime ShiftDate { get; set; }
         public int? EmployeeId { get; set; }
-        public int OrganizationId { get; set; }
+        public int? OrganizationId { get; set; }
         public int? SortOrder { get; set; }
     }
 }
