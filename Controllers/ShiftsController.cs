@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -30,15 +31,39 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult GetById(Int32 id)
         {
-            var result = _context.Shifts.Where(x => x.OrganizationId == id).ToList();
-            return Ok(result);
-        }
+            try
+            {
+                var result = _context.Shifts.Join(_context.Positions,  
+                    shift => shift.positionId,  
+                    positions => positions.Id,  
+                    (shift, positions) => new  
+                    {  
+                        Shift = shift,  
+                        Positions = positions  
+                    }).Where(x => x.Shift.OrganizationId == id);
 
-        [HttpPost()]
-        public IActionResult GetByDate([FromBody]ShiftModel helper)
-        {
-            var result = _context.Shifts.Where(x => x.ShiftDate == helper.ShiftDate).ToList();
-            return Ok(result);
+                List<ShiftMergedModel> list = new List<ShiftMergedModel>();
+                
+                foreach (var item in result)
+                {
+                    ShiftMergedModel shift = new ShiftMergedModel();
+                    shift.Id = item.Shift.Id;
+                    shift.OrganizationId = item.Shift.OrganizationId;
+                    shift.ShiftDate = item.Shift.ShiftDate;
+                    shift.SortOrder = item.Shift.SortOrder;
+                    shift.PositionName = item.Positions.PositionName;
+                    shift.DefaultTime = item.Positions.DefaultTime;
+                    
+                    list.Add(shift);
+                }
+
+                return Ok(list);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = "Error is" + ex.Message });
+            }
+            
         }
 
         [HttpPost]
