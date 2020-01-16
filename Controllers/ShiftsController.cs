@@ -27,14 +27,38 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        public IActionResult GetById(Int32 id)
+        {
+            var result = _context.Shifts.Where(x => x.OrganizationId == id).ToList();
+            return Ok(result);
+        }
+
+        [HttpPost()]
+        public IActionResult GetByDate([FromBody]ShiftModel helper)
+        {
+            var result = _context.Shifts.Where(x => x.ShiftDate == helper.ShiftDate).ToList();
+            return Ok(result);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Save([FromBody]Shifts helper)
+        public async Task<IActionResult> Save([FromBody]ShiftModel helper)
         {
             try
-            {
-                _context.Shifts.Add(helper);
+            { 
+                for(int i = 0; i < helper.positionId.Length; i++)
+                {
+                    Shifts shift = new Shifts();
+                    shift.OrganizationId = helper.OrganizationId;
+                    shift.EmployeeId = null;
+                    shift.SortOrder = i + 1;
+                    shift.positionId = Convert.ToInt32(helper.positionId[i]);
+                    shift.ShiftDate = helper.ShiftDate;
+                    shift.CreatedAt = DateTime.Now;
+                    _context.Shifts.Add(shift);
+                }
                 await _context.SaveChangesAsync();
-                return Ok(helper);
+                return Ok(new { message = "Shift created" });
             }
             catch (System.Exception ex)
             {
