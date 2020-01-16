@@ -61,7 +61,7 @@ namespace WebApi.Controllers
             }
             catch (System.Exception ex)
             {
-                return BadRequest(new { message = "Error is" + ex.Message });
+                return BadRequest(new { message = "Error is:" + ex.Message });
             }
             
         }
