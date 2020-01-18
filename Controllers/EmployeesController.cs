@@ -37,6 +37,7 @@ namespace WebApi.Controllers
             {
                 NewEmployeeModel newEmployee = new NewEmployeeModel();
                 newEmployee.Id = item.Id;
+                newEmployee.FullName = item.LastName + " " + item.FirstName;
                 newEmployee.Hotels = item.Hotels;
                 newEmployee.Shops = item.Shops;
                 newEmployee.Buses = item.Buses;
