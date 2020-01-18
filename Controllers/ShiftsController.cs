@@ -101,7 +101,7 @@ namespace WebApi.Controllers
                 if(helpers == null)
                     return BadRequest();
                 
-                //existingHelper.HelperName = helpers.HelperName;
+                existingHelper.EmployeeId = helpers.EmployeeId;
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
             }
