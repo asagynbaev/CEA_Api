@@ -5,6 +5,7 @@ namespace WebApi.Models
     public class ShiftMergedModel
     {
         public int Id { get; set; }
+        public int? EmployeeId { get; set; }
         public DateTime ShiftDate { get; set; }
         public int? OrganizationId { get; set; }
         public int? SortOrder { get; set; }

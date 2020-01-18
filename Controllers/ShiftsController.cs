@@ -48,6 +48,7 @@ namespace WebApi.Controllers
                 {
                     ShiftMergedModel shift = new ShiftMergedModel();
                     shift.Id = item.Shift.Id;
+                    shift.EmployeeId = item.Shift.EmployeeId;
                     shift.OrganizationId = item.Shift.OrganizationId;
                     shift.ShiftDate = item.Shift.ShiftDate;
                     shift.SortOrder = item.Shift.SortOrder;
