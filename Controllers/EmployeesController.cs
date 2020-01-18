@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -25,6 +26,29 @@ namespace WebApi.Controllers
         {
             var result = _context.Employees.ToList();
             return Ok(result);
+        }
+
+        [HttpGet(("autocomplete"))]
+        public IActionResult GetAutocmplete()
+        {
+            var result = _context.Employees.ToList();
+            List<NewEmployeeModel> list = new List<NewEmployeeModel>();
+            foreach (var item in result)
+            {
+                NewEmployeeModel newEmployee = new NewEmployeeModel();
+                newEmployee.Id = item.Id;
+                newEmployee.Hotels = item.Hotels;
+                newEmployee.Shops = item.Shops;
+                newEmployee.Buses = item.Buses;
+                newEmployee.Status = item.Status;
+                newEmployee.BusesTrain = item.BusesTrain;
+                newEmployee.HotelsTrain = item.HotelsTrain;
+                newEmployee.ShopsTrain = item.ShopsTrain;
+
+                list.Add(newEmployee);
+            }
+
+            return Ok(list);
         }
 
         [HttpPost]
