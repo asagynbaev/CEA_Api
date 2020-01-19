@@ -2,10 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using WebApi.Entities;
 using WebApi.Models;
 
 namespace WebApi.Controllers
@@ -106,6 +104,27 @@ namespace WebApi.Controllers
                 
                 existingHelper.EmployeeId = helpers.EmployeeId;
                 await _context.SaveChangesAsync(true);
+                return new NoContentResult();
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = "Error is" + ex.Message });
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var shifts = await _context.Shifts.FindAsync(id);
+                if (shifts == null)
+                {
+                    return NotFound();
+                }
+
+                _context.Shifts.Remove(shifts);
+                await _context.SaveChangesAsync();
                 return new NoContentResult();
             }
             catch (System.Exception ex)
