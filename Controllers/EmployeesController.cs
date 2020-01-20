@@ -58,7 +58,7 @@ namespace WebApi.Controllers
             try
             {
                 employer.CreatedAt = DateTime.Now;
-                employer.Status = 1;
+                employer.Status = true;
                 _context.Employees.Add(employer);
                 await _context.SaveChangesAsync();
                 return Ok(employer);

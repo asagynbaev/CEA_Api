@@ -21,7 +21,7 @@ namespace WebApi.Models
         public int VisaType { get; set; }
         public string WorkExperience { get; set; }
         public DateTime CreatedAt { get; set; }
-        public int Status { get; set; }
+        public bool? Status { get; set; }
         public int Cityzenship { get; set; }
         public int Advert { get; set; }
         public bool HotelsTrain { get; set; }
