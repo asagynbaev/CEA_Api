@@ -71,20 +71,47 @@ namespace WebApi.Controllers
         public async Task<IActionResult> Save([FromBody]ShiftModel helper)
         {
             try
-            { 
-                for(int i = 0; i < helper.positionId.Length; i++)
+            {
+                foreach (var item in helper.Amounts)
                 {
-                    Shifts shift = new Shifts();
-                    shift.OrganizationId = helper.OrganizationId;
-                    shift.EmployeeId = null;
-                    shift.SortOrder = i + 1;
-                    shift.positionId = Convert.ToInt32(helper.positionId[i]);
-                    shift.ShiftDate = helper.ShiftDate;
-                    shift.CreatedAt = DateTime.Now;
-                    _context.Shifts.Add(shift);
+                    if(item.Amount > 1)
+                    {
+                        for(int i = 1; i <= item.Amount; i++)
+                        {
+                            Shifts shift = new Shifts();
+                            shift.OrganizationId = helper.OrganizationId;
+                            shift.EmployeeId = null;
+                            shift.positionId = item.Id;
+                            shift.ShiftDate = helper.ShiftDate;
+                            shift.CreatedAt = DateTime.Now;
+                            _context.Shifts.Add(shift);
+                        }
+                    }
+                    else
+                    {
+                        Shifts shift = new Shifts();
+                        shift.OrganizationId = helper.OrganizationId;
+                        shift.EmployeeId = null;
+                        shift.positionId = item.Id;
+                        shift.ShiftDate = helper.ShiftDate;
+                        shift.CreatedAt = DateTime.Now;
+                        _context.Shifts.Add(shift);
+                    }
                 }
+
+                // for(int i = 0; i < helper.positionId.Length; i++)
+                // {
+                //     Shifts shift = new Shifts();
+                //     shift.OrganizationId = helper.OrganizationId;
+                //     shift.EmployeeId = null;
+                //     shift.SortOrder = i + 1;
+                //     shift.positionId = Convert.ToInt32(helper.positionId[i]);
+                //     shift.ShiftDate = helper.ShiftDate;
+                //     shift.CreatedAt = DateTime.Now;
+                //     _context.Shifts.Add(shift);
+                // }
                 await _context.SaveChangesAsync();
-                return Ok(new { message = "Shift created" });
+                return Ok(new { message = "Shifts created" });
             }
             catch (System.Exception ex)
             {
