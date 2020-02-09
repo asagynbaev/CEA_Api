@@ -8,7 +8,7 @@ namespace WebApi.Models
         [Key]
         public int Id { get; set; }
         public int OrganizationId { get; set; }
-        public string PositionName { get; set; }
+        public string Name { get; set; }
         public DateTime? DefaultTime { get; set; }
         public int SortOrder { get; set; }
     }

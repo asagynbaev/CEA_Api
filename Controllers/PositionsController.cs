@@ -40,7 +40,7 @@ namespace WebApi.Controllers
             {
                 Positions positions = new Positions();
                 positions.OrganizationId = helper.OrganizationId;
-                positions.PositionName = helper.PositionName;
+                positions.Name = helper.Name;
                 if(!string.IsNullOrEmpty(helper.DefaultTime))
                 {
                     helper.DefaultTime = helper.DefaultTime + ":00";
@@ -66,7 +66,7 @@ namespace WebApi.Controllers
                 if(helpers == null)
                     return BadRequest();
                 
-                existingHelper.PositionName = helpers.PositionName;
+                existingHelper.Name = helpers.Name;
                 existingHelper.DefaultTime = helpers.DefaultTime;
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
