@@ -72,6 +72,7 @@ namespace WebApi.Controllers
         {
             try
             {
+                TimeSpan ts = new TimeSpan(00, 00, 01);
                 foreach (var item in helper.Amounts)
                 {
                     if(item.Amount > 1)
@@ -82,7 +83,7 @@ namespace WebApi.Controllers
                             shift.OrganizationId = helper.OrganizationId;
                             shift.EmployeeId = null;
                             shift.positionId = item.Id;
-                            shift.ShiftDate = helper.ShiftDate;
+                            shift.ShiftDate = helper.ShiftDate + ts;
                             shift.CreatedAt = DateTime.Now;
                             _context.Shifts.Add(shift);
                         }
@@ -93,7 +94,7 @@ namespace WebApi.Controllers
                         shift.OrganizationId = helper.OrganizationId;
                         shift.EmployeeId = null;
                         shift.positionId = item.Id;
-                        shift.ShiftDate = helper.ShiftDate;
+                        shift.ShiftDate = helper.ShiftDate + ts;
                         shift.CreatedAt = DateTime.Now;
                         _context.Shifts.Add(shift);
                     }
