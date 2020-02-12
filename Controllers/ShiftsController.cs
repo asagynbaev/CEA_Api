@@ -50,6 +50,7 @@ namespace WebApi.Controllers
                     shift.OrganizationId = item.Shift.OrganizationId;
                     shift.ShiftDate = item.Shift.ShiftDate;
                     shift.SortOrder = item.Shift.SortOrder;
+                    shift.PositionId = item.Shift.positionId;
                     shift.PositionName = item.Positions.Name;
                     shift.DefaultTime = item.Positions.DefaultTime;
                     shift.CreatedAt = item.Shift.CreatedAt;
