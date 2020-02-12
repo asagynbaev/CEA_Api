@@ -68,6 +68,44 @@ namespace WebApi.Controllers
             
         }
 
+        [HttpGet("/scheduler/{id}")]
+        public IActionResult GetByIdForScheduler(Int32 id)
+        {
+            try
+            {
+                var result = _context.Shifts.Join(_context.Positions,  
+                    shift => shift.positionId,  
+                    positions => positions.Id,  
+                    (shift, positions) => new  
+                    {  
+                        Shift = shift,  
+                        Positions = positions  
+                    }).Where(x => x.Shift.OrganizationId == id);
+
+                List<ForScheduler> list = new List<ForScheduler>();
+                
+                foreach (var item in result)
+                {
+                    ForScheduler shift = new ForScheduler();
+                    shift.Id = item.Shift.Id;
+                    shift.Start = item.Shift.ShiftDate;
+                    shift.End = item.Shift.ShiftDate;
+                    shift.Title = item.Positions.Name;
+                    shift.ResourceId = item.Shift.positionId;
+
+                    
+                    list.Add(shift);
+                }
+
+                return Ok(list);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = "Error is:" + ex.Message });
+            }
+            
+        }
+
         [HttpPost]
         public async Task<IActionResult> Save([FromBody]ShiftModel helper)
         {
