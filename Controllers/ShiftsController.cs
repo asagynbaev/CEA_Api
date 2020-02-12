@@ -74,26 +74,14 @@ namespace WebApi.Controllers
             try
             {
 
-                var result = from e in _context.Shifts where e.OrganizationId == id
-                    join d in _context.Positions on e.positionId equals d.Id into table1  
-                    from d in table1.ToList()  
-                    join i in _context.Employees on e.EmployeeId equals i.Id into table2  
-                    from i in table2.ToList()  
-                    select new
+                var result = _context.Shifts.Join(_context.Employees, 
+                    shift => shift.EmployeeId,  
+                    employees => employees.Id,  
+                    (shift, employees) => new  
                     {  
-                        Shift=e,  
-                        Positions=d,  
-                        Employees=i  
-                    };
-
-                // var result = _context.Shifts.Join(_context.Positions, 
-                //     shift => shift.positionId,  
-                //     positions => positions.Id,  
-                //     (shift, positions) => new  
-                //     {  
-                //         Shift = shift,  
-                //         Positions = positions,
-                //     }).Where(x => x.Shift.OrganizationId == id);
+                        Shift = shift,  
+                        Employees = employees,
+                    }).Where(x => x.Shift.OrganizationId == id);
 
                 List<ForScheduler> list = new List<ForScheduler>();
                 
