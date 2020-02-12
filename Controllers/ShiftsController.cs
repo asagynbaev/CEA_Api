@@ -68,7 +68,7 @@ namespace WebApi.Controllers
             
         }
 
-        [HttpGet("/scheduler/{id}")]
+        [HttpGet("scheduler/{id}")]
         public IActionResult GetByIdForScheduler(Int32 id)
         {
             try
