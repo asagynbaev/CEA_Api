@@ -53,16 +53,16 @@ namespace WebApi.Controllers
                 positions.OrganizationId = helper.OrganizationId;
                 positions.Name = helper.Name;
                 
-                if(!string.IsNullOrEmpty(helper.TimeFrom))
+                if(!string.IsNullOrEmpty(helper.TFrom))
                 {
-                    helper.TimeFrom = helper.TimeFrom + ":00";
-                    positions.TimeFrom = DateTime.ParseExact(helper.TimeFrom, "HH:mm:ss", CultureInfo.InvariantCulture);
+                    helper.TFrom = helper.TFrom + ":00";
+                    positions.TFrom = DateTime.ParseExact(helper.TFrom, "HH:mm:ss", CultureInfo.InvariantCulture);
                 }
 
-                if(!string.IsNullOrEmpty(helper.TimeTo))
+                if(!string.IsNullOrEmpty(helper.TTo))
                 {
-                    helper.TimeTo = helper.TimeTo + ":00";
-                    positions.TimeTo = DateTime.ParseExact(helper.TimeTo, "HH:mm:ss", CultureInfo.InvariantCulture);
+                    helper.TTo = helper.TTo + ":00";
+                    positions.TTo = DateTime.ParseExact(helper.TTo, "HH:mm:ss", CultureInfo.InvariantCulture);
                 }
 
                 _context.Positions.Add(positions);
@@ -87,8 +87,8 @@ namespace WebApi.Controllers
                     return BadRequest();
                 
                 existingHelper.Name = helpers.Name;
-                existingHelper.TimeFrom = helpers.TimeFrom;
-                existingHelper.TimeTo = helpers.TimeTo;
+                existingHelper.TFrom = helpers.TFrom;
+                existingHelper.TTo = helpers.TTo;
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
             }
