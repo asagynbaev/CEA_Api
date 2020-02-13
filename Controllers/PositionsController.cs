@@ -32,8 +32,15 @@ namespace WebApi.Controllers
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var result = _context.Positions.Where(x => x.OrganizationId == id).ToList();
-            return Ok(result);
+            try
+            {
+                var result = _context.Positions.Where(x => x.OrganizationId == id).ToList();
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { message = "Error is" + ex.Message });
+            }
         }
 
         [EnableCors("AllowOrigin")]
