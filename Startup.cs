@@ -25,11 +25,7 @@ namespace WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowOrigin",
-                    builder => builder.WithOrigins("http://cea-gui.herokuapp.com/"));
-            });
+            services.AddCors();
             services.AddControllers();
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");
