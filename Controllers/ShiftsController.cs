@@ -52,7 +52,8 @@ namespace WebApi.Controllers
                     shift.SortOrder = item.Shift.SortOrder;
                     shift.PositionId = item.Shift.positionId;
                     shift.PositionName = item.Positions.Name;
-                    shift.DefaultTime = item.Positions.DefaultTime;
+                    shift.TimeFrom = item.Positions.TimeFrom;
+                    shift.TimeTo = item.Positions.TimeTo;
                     shift.CreatedAt = item.Shift.CreatedAt;
 
                     
