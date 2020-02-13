@@ -83,6 +83,7 @@ namespace WebApi.Controllers
                 
                 existingHelper.Name = helpers.Name;
                 existingHelper.DefaultTime = helpers.DefaultTime;
+                existingHelper.DefaultTime2 = helpers.DefaultTime2;
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
             }

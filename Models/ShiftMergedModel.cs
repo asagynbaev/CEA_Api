@@ -12,6 +12,7 @@ namespace WebApi.Models
         public string PositionName { get; set; }
         public int PositionId { get; set; }
         public DateTime? DefaultTime { get; set; }
+        public DateTime? DefaultTime2 { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }
