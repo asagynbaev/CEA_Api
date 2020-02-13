@@ -54,6 +54,13 @@ namespace WebApi.Controllers
                     helper.DefaultTime = helper.DefaultTime + ":00";
                     positions.DefaultTime = DateTime.ParseExact(helper.DefaultTime, "HH:mm:ss", CultureInfo.InvariantCulture);
                 }
+
+                if(!string.IsNullOrEmpty(helper.DefaultTime2))
+                {
+                    helper.DefaultTime2 = helper.DefaultTime2 + ":00";
+                    positions.DefaultTime2 = DateTime.ParseExact(helper.DefaultTime2, "HH:mm:ss", CultureInfo.InvariantCulture);
+                }
+
                 _context.Positions.Add(positions);
                 await _context.SaveChangesAsync();
                 return Ok(helper);

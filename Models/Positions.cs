@@ -10,6 +10,7 @@ namespace WebApi.Models
         public int OrganizationId { get; set; }
         public string Name { get; set; }
         public DateTime? DefaultTime { get; set; }
+        public DateTime? DefaultTime2 { get; set; }
         public int SortOrder { get; set; }
     }
 }
