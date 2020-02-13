@@ -169,8 +169,8 @@ namespace WebApi.Controllers
                 var existingHelper = await _context.Shifts.Where(x => x.Id == helpers.Id).SingleOrDefaultAsync();
                 if(helpers == null)
                     return BadRequest();
-                
-                existingHelper.EmployeeId = helpers.EmployeeId;
+                if(helpers.EmployeeId != null)
+                    existingHelper.EmployeeId = helpers.EmployeeId;
                 existingHelper.IsCanceled = helpers.IsCanceled;
                 existingHelper.CreatedAt = DateTime.Now;
                 existingHelper.CanceledBy = helpers.CanceledBy;
