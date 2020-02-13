@@ -12,6 +12,9 @@ namespace WebApi.Models
         public int? EmployeeId { get; set; }
         public int? OrganizationId { get; set; }
         public int? SortOrder { get; set; }
+        public bool IsCanceled { get; set; }
+        public string CanceledAt { get; set; }
+        public int CanceledBy { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }
