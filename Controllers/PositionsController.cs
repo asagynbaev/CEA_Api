@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Models;
@@ -18,13 +19,15 @@ namespace WebApi.Controllers
             _context = context;
         }
 
+        [EnableCors("AllowOrigin")]
         [HttpGet]
         public IActionResult Get()
         {
             var result = _context.Positions.ToList();
             return Ok(result);
         }
-
+        
+        [EnableCors("AllowOrigin")]
         //[Authorize(Roles = Role.Admin)]
         [HttpGet("{id}")]
         public IActionResult Get(int id)
@@ -33,6 +36,7 @@ namespace WebApi.Controllers
             return Ok(result);
         }
 
+        [EnableCors("AllowOrigin")]
         [HttpPost]
         public async Task<IActionResult> SavePosition([FromBody]PositionModel helper)
         {
@@ -65,6 +69,7 @@ namespace WebApi.Controllers
             
         }
 
+        [EnableCors("AllowOrigin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Int32 id, [FromBody]Positions helpers)
         {
