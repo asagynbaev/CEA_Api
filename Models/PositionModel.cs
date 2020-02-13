@@ -5,8 +5,7 @@ namespace WebApi.Models
         public int? Id { get; set; }
         public int OrganizationId { get; set; }
         public string Name { get; set; }
-        public string TFrom { get; set; }
-        public string TTo { get; set; }
+        public string DefaultTime { get; set; }
     }
     
 }

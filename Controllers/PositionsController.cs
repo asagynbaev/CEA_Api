@@ -2,7 +2,6 @@ using System;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using WebApi.Models;
@@ -18,8 +17,7 @@ namespace WebApi.Controllers
         {
             _context = context;
         }
-
-        [EnableCors("AllowOrigin")]
+        
         [HttpGet]
         public IActionResult Get()
         {
@@ -27,7 +25,6 @@ namespace WebApi.Controllers
             return Ok(result);
         }
         
-        [EnableCors("AllowOrigin")]
         //[Authorize(Roles = Role.Admin)]
         [HttpGet("{id}")]
         public IActionResult Get(int id)
@@ -43,7 +40,6 @@ namespace WebApi.Controllers
             }
         }
 
-        [EnableCors("AllowOrigin")]
         [HttpPost]
         public async Task<IActionResult> SavePosition([FromBody]PositionModel helper)
         {
@@ -53,18 +49,11 @@ namespace WebApi.Controllers
                 positions.OrganizationId = helper.OrganizationId;
                 positions.Name = helper.Name;
                 
-                if(!string.IsNullOrEmpty(helper.TFrom))
+                if(!string.IsNullOrEmpty(helper.DefaultTime))
                 {
-                    helper.TFrom = helper.TFrom + ":00";
-                    positions.TFrom = DateTime.ParseExact(helper.TFrom, "HH:mm:ss", CultureInfo.InvariantCulture);
+                    helper.DefaultTime = helper.DefaultTime + ":00";
+                    positions.DefaultTime = DateTime.ParseExact(helper.DefaultTime, "HH:mm:ss", CultureInfo.InvariantCulture);
                 }
-
-                if(!string.IsNullOrEmpty(helper.TTo))
-                {
-                    helper.TTo = helper.TTo + ":00";
-                    positions.TTo = DateTime.ParseExact(helper.TTo, "HH:mm:ss", CultureInfo.InvariantCulture);
-                }
-
                 _context.Positions.Add(positions);
                 await _context.SaveChangesAsync();
                 return Ok(helper);
@@ -76,7 +65,6 @@ namespace WebApi.Controllers
             
         }
 
-        [EnableCors("AllowOrigin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Int32 id, [FromBody]Positions helpers)
         {
@@ -87,8 +75,7 @@ namespace WebApi.Controllers
                     return BadRequest();
                 
                 existingHelper.Name = helpers.Name;
-                existingHelper.TFrom = helpers.TFrom;
-                existingHelper.TTo = helpers.TTo;
+                existingHelper.DefaultTime = helpers.DefaultTime;
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
             }

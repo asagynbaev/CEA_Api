@@ -11,8 +11,7 @@ namespace WebApi.Models
         public int? SortOrder { get; set; }
         public string PositionName { get; set; }
         public int PositionId { get; set; }
-        public DateTime? TimeFrom { get; set; }
-        public DateTime? TimeTo { get; set; }
+        public DateTime? DefaultTime { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }
