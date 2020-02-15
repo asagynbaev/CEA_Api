@@ -171,9 +171,12 @@ namespace WebApi.Controllers
                     return BadRequest();
                 if(helpers.EmployeeId != null)
                     existingHelper.EmployeeId = helpers.EmployeeId;
-                existingHelper.IsCanceled = helpers.IsCanceled;
-                existingHelper.CreatedAt = DateTime.Now;
-                existingHelper.CanceledBy = helpers.CanceledBy;
+                else
+                {
+                    existingHelper.IsCanceled = helpers.IsCanceled;
+                    existingHelper.CanceledAt = DateTime.Now;
+                    existingHelper.CanceledBy = helpers.CanceledBy;
+                }
                 await _context.SaveChangesAsync(true);
                 return new NoContentResult();
             }
