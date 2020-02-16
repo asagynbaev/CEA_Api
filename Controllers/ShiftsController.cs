@@ -55,6 +55,7 @@ namespace WebApi.Controllers
                     shift.DefaultTime = item.Positions.DefaultTime;
                     shift.CreatedAt = item.Shift.CreatedAt;
 
+
                     
                     list.Add(shift);
                 }

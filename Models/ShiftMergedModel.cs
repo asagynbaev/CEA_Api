@@ -13,6 +13,8 @@ namespace WebApi.Models
         public int PositionId { get; set; }
         public DateTime? DefaultTime { get; set; }
         public DateTime? DefaultTime2 { get; set; }
+        public bool IsCanceled { get; set; }
+        public DateTime? CanceledAt { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }
