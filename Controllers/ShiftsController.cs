@@ -54,6 +54,8 @@ namespace WebApi.Controllers
                     shift.PositionName = item.Positions.Name;
                     shift.DefaultTime = item.Positions.DefaultTime;
                     shift.CreatedAt = item.Shift.CreatedAt;
+                    shift.CanceledAt = item.Shift.CanceledAt;
+                    shift.IsCanceled = item.Shift.IsCanceled;
 
 
                     
