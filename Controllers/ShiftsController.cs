@@ -116,11 +116,24 @@ namespace WebApi.Controllers
             try
             {
                 TimeSpan ts = new TimeSpan(00, 00, 01);
-                foreach (var item in helper.Amounts)
+                if(helper.Amounts != null)
                 {
-                    if(item.Amount > 1)
+                    foreach (var item in helper.Amounts)
                     {
-                        for(int i = 1; i <= item.Amount; i++)
+                        if(item.Amount > 1)
+                        {
+                            for(int i = 1; i <= item.Amount; i++)
+                            {
+                                Shifts shift = new Shifts();
+                                shift.OrganizationId = helper.OrganizationId;
+                                shift.EmployeeId = null;
+                                shift.positionId = item.Id;
+                                shift.ShiftDate = helper.ShiftDate + ts;
+                                shift.CreatedAt = DateTime.Now;
+                                _context.Shifts.Add(shift);
+                            }
+                        }
+                        else
                         {
                             Shifts shift = new Shifts();
                             shift.OrganizationId = helper.OrganizationId;
@@ -131,29 +144,17 @@ namespace WebApi.Controllers
                             _context.Shifts.Add(shift);
                         }
                     }
-                    else
-                    {
-                        Shifts shift = new Shifts();
-                        shift.OrganizationId = helper.OrganizationId;
-                        shift.EmployeeId = null;
-                        shift.positionId = item.Id;
-                        shift.ShiftDate = helper.ShiftDate + ts;
-                        shift.CreatedAt = DateTime.Now;
-                        _context.Shifts.Add(shift);
-                    }
                 }
-
-                // for(int i = 0; i < helper.positionId.Length; i++)
-                // {
-                //     Shifts shift = new Shifts();
-                //     shift.OrganizationId = helper.OrganizationId;
-                //     shift.EmployeeId = null;
-                //     shift.SortOrder = i + 1;
-                //     shift.positionId = Convert.ToInt32(helper.positionId[i]);
-                //     shift.ShiftDate = helper.ShiftDate;
-                //     shift.CreatedAt = DateTime.Now;
-                //     _context.Shifts.Add(shift);
-                // }
+                else
+                {
+                    Shifts shift = new Shifts();
+                    shift.OrganizationId = helper.OrganizationId;
+                    shift.EmployeeId = helper.EmployeeId;
+                    shift.positionId = helper.positionId;
+                    shift.ShiftDate = helper.ShiftDate + ts;
+                    shift.CreatedAt = DateTime.Now;
+                    _context.Shifts.Add(shift);
+                }
                 await _context.SaveChangesAsync();
                 return Ok(new { message = "Shifts created" });
             }
