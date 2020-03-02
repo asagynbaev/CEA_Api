@@ -57,8 +57,6 @@ namespace WebApi.Controllers
                     shift.CanceledAt = item.Shift.CanceledAt;
                     shift.IsCanceled = item.Shift.IsCanceled;
 
-
-                    
                     list.Add(shift);
                 }
 
@@ -111,58 +109,28 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Save([FromBody]ShiftModel helper)
+        public IList<Shifts> Save([FromBody]ShiftModel helper)
         {
-            try
+            List<Shifts> shiftList = new List<Shifts>();
+            TimeSpan ts = new TimeSpan(00, 00, 01);
+
+            foreach (var item in helper.Amounts)
             {
-                TimeSpan ts = new TimeSpan(00, 00, 01);
-                if(helper.Amounts != null)
-                {
-                    foreach (var item in helper.Amounts)
-                    {
-                        if(item.Amount > 1)
-                        {
-                            for(int i = 1; i <= item.Amount; i++)
-                            {
-                                Shifts shift = new Shifts();
-                                shift.OrganizationId = helper.OrganizationId;
-                                shift.EmployeeId = null;
-                                shift.positionId = item.Id;
-                                shift.ShiftDate = helper.ShiftDate + ts;
-                                shift.CreatedAt = DateTime.Now;
-                                _context.Shifts.Add(shift);
-                            }
-                        }
-                        else
-                        {
-                            Shifts shift = new Shifts();
-                            shift.OrganizationId = helper.OrganizationId;
-                            shift.EmployeeId = null;
-                            shift.positionId = item.Id;
-                            shift.ShiftDate = helper.ShiftDate + ts;
-                            shift.CreatedAt = DateTime.Now;
-                            _context.Shifts.Add(shift);
-                        }
-                    }
-                }
-                else
+                for(int i = 1; i <= item.Amount; i++)
                 {
                     Shifts shift = new Shifts();
                     shift.OrganizationId = helper.OrganizationId;
-                    shift.EmployeeId = helper.EmployeeId;
-                    shift.positionId = helper.positionId;
+                    shift.EmployeeId = null;
+                    shift.positionId = item.Id;
                     shift.ShiftDate = helper.ShiftDate + ts;
                     shift.CreatedAt = DateTime.Now;
-                    _context.Shifts.Add(shift);
+                    
+                    var insertedShift = GetShift(shift);
+                    shiftList.Add(insertedShift);
                 }
-                await _context.SaveChangesAsync();
-                return Ok(new { message = "Shifts created" });
             }
-            catch (System.Exception ex)
-            {
-                return BadRequest(new { message = "Error is" + ex.Message });
-            }
-            
+
+            return shiftList.ToArray();
         }
 
         [HttpPut("{id}")]
@@ -209,6 +177,15 @@ namespace WebApi.Controllers
             {
                 return BadRequest(new { message = "Error is" + ex.Message });
             }
+        }
+
+        public Shifts GetShift(Shifts myShift)
+        {
+            _context.Shifts.Add(myShift);
+            _context.SaveChanges();
+            int id = myShift.Id;
+            var res = _context.Shifts.Where(x => x.Id == id).Single();
+            return res;
         }
     }
 }
