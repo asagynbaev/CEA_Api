@@ -150,7 +150,7 @@ namespace WebApi.Controllers
                     existingHelper.CanceledBy = helpers.CanceledBy;
                 }
                 await _context.SaveChangesAsync(true);
-                return new NoContentResult();
+                return Ok(existingHelper);
             }
             catch (System.Exception ex)
             {
