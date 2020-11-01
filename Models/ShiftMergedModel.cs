@@ -11,10 +11,12 @@ namespace WebApi.Models
         public int? SortOrder { get; set; }
         public string PositionName { get; set; }
         public int PositionId { get; set; }
-        public DateTime? DefaultTime { get; set; }
-        public DateTime? DefaultTime2 { get; set; }
         public bool IsCanceled { get; set; }
         public DateTime? CanceledAt { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public int CanceledBy { get; set; }
+        public DateTime Start { get; set; }
+        public DateTime End { get; set; }
+        public string Title { get; set; }
+        public int ResourceId { get; set; }
     }
 }

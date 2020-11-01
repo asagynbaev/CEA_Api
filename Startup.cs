@@ -36,7 +36,7 @@ namespace WebApi
             var key = Encoding.ASCII.GetBytes(appSettings.Secret);
             services.AddDbContext<CeaContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
-
+            
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

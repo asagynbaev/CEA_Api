@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WebApi.Models;
@@ -9,9 +10,10 @@ using WebApi.Models;
 namespace WebApi.Migrations
 {
     [DbContext(typeof(CeaContext))]
-    partial class CeaContextModelSnapshot : ModelSnapshot
+    [Migration("20200329214006_Catering")]
+    partial class Catering
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,16 +34,10 @@ namespace WebApi.Migrations
                     b.Property<int>("Amount")
                         .HasColumnType("integer");
 
-                    b.Property<int>("AmountOfPeople")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime>("CatDate")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<string>("DressCode")
                         .HasColumnType("text");
 
-                    b.Property<string>("OrganizationName")
+                    b.Property<string>("Organization")
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")

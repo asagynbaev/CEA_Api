@@ -21,8 +21,19 @@ namespace WebApi.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-            var result = _context.Positions.ToList();
-            return Ok(result);
+            try
+            {
+                var result = _context.Positions.ToList();
+                foreach (var item in result)
+                {
+                    item.Name = item.DefaultTime.Value.ToString("HH:mm") + "-" + item.DefaultTime2.Value.ToString("HH:mm") + " " + item.Name;
+                }
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = "Error is" + ex.Message });
+            }
         }
         
         //[Authorize(Roles = Role.Admin)]
@@ -32,6 +43,10 @@ namespace WebApi.Controllers
             try
             {
                 var result = _context.Positions.Where(x => x.OrganizationId == id).ToList();
+                foreach (var item in result)
+                {
+                    item.Name = item.DefaultTime.Value.ToString("HH:mm") + " " + item.Name;
+                }
                 return Ok(result);
             }
             catch(Exception ex)

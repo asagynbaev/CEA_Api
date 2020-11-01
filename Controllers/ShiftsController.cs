@@ -12,7 +12,7 @@ namespace WebApi.Controllers
     [ApiController]
     public class ShiftsController : ControllerBase
     {
-        private readonly CeaContext _context;
+        public readonly CeaContext _context;
         public ShiftsController(CeaContext context)
         {
             _context = context;
@@ -31,19 +31,24 @@ namespace WebApi.Controllers
         {
             try
             {
-                var result = _context.Shifts.Join(_context.Positions,  
-                    shift => shift.positionId,  
-                    positions => positions.Id,  
-                    (shift, positions) => new  
-                    {  
-                        Shift = shift,  
-                        Positions = positions  
-                    }).Where(x => x.Shift.OrganizationId == id);
+                var result = from Shift in _context.Shifts
+                join Position in _context.Positions on Shift.positionId equals Position.Id
+                join Employee in _context.Employees on Shift.EmployeeId equals Employee.Id into fff
+                from asd in fff.DefaultIfEmpty()
+                where Shift.OrganizationId == id
+                select new {Shift, asd, Position};
 
                 List<ShiftMergedModel> list = new List<ShiftMergedModel>();
                 
                 foreach (var item in result)
                 {
+                    var title = "";
+                    if(item.Shift.EmployeeId != null)
+                        title = item.asd.FirstName + " " + item.asd.LastName;
+
+                    TimeSpan from = item.Position.DefaultTime.Value.TimeOfDay;
+                    TimeSpan to = item.Position.DefaultTime2.Value.TimeOfDay;
+
                     ShiftMergedModel shift = new ShiftMergedModel();
                     shift.Id = item.Shift.Id;
                     shift.EmployeeId = item.Shift.EmployeeId;
@@ -51,9 +56,12 @@ namespace WebApi.Controllers
                     shift.ShiftDate = item.Shift.ShiftDate;
                     shift.SortOrder = item.Shift.SortOrder;
                     shift.PositionId = item.Shift.positionId;
-                    shift.PositionName = item.Positions.Name;
-                    shift.DefaultTime = item.Positions.DefaultTime;
-                    shift.CreatedAt = item.Shift.CreatedAt;
+                    shift.PositionName = item.Position.DefaultTime.Value.ToString("HH:mm") + " " + item.Position.Name;
+                    shift.Start = item.Shift.ShiftDate + from;
+                    shift.End = item.Shift.ShiftDate + to;
+                    shift.ResourceId = item.Shift.positionId;
+                    shift.Title = title;
+                    shift.CanceledBy = item.Shift.CanceledBy;
                     shift.CanceledAt = item.Shift.CanceledAt;
                     shift.IsCanceled = item.Shift.IsCanceled;
 
@@ -69,49 +77,10 @@ namespace WebApi.Controllers
             
         }
 
-        [HttpGet("scheduler/{id}")]
-        public IActionResult GetByIdForScheduler(Int32 id)
-        {
-            try
-            {
-
-                var result = _context.Shifts.Join(_context.Employees, 
-                    shift => shift.EmployeeId,  
-                    employees => employees.Id,  
-                    (shift, employees) => new  
-                    {  
-                        Shift = shift,  
-                        Employees = employees,
-                    }).Where(x => x.Shift.OrganizationId == id);
-
-                List<ForScheduler> list = new List<ForScheduler>();
-                
-                foreach (var item in result)
-                {
-                    ForScheduler shift = new ForScheduler();
-                    shift.Id = item.Shift.Id;
-                    shift.Start = item.Shift.ShiftDate;
-                    shift.End = item.Shift.ShiftDate;
-                    shift.Title = item.Employees.FirstName + " " + item.Employees.LastName;
-                    shift.ResourceId = item.Shift.positionId;
-
-                    
-                    list.Add(shift);
-                }
-
-                return Ok(list);
-            }
-            catch (System.Exception ex)
-            {
-                return BadRequest(new { message = "Error is:" + ex.Message });
-            }
-            
-        }
-
         [HttpPost]
-        public IList<Shifts> Save([FromBody]ShiftModel helper)
+        public IList<ShiftMergedModel> Save([FromBody]ShiftModel helper)
         {
-            List<Shifts> shiftList = new List<Shifts>();
+            List<ShiftMergedModel> shiftList = new List<ShiftMergedModel>();
             TimeSpan ts = new TimeSpan(00, 00, 01);
 
             foreach (var item in helper.Amounts)
@@ -129,7 +98,6 @@ namespace WebApi.Controllers
                     shiftList.Add(insertedShift);
                 }
             }
-
             return shiftList.ToArray();
         }
 
@@ -139,18 +107,33 @@ namespace WebApi.Controllers
             try
             {
                 var existingHelper = await _context.Shifts.Where(x => x.Id == helpers.Id).SingleOrDefaultAsync();
+                var shiftToReturn = GetShift(existingHelper);
                 if(helpers == null)
                     return BadRequest();
                 if(helpers.EmployeeId != null)
+                {
+                    // For the database
                     existingHelper.EmployeeId = helpers.EmployeeId;
+
+                    // For response
+                    shiftToReturn.EmployeeId = helpers.EmployeeId;
+                    var empName = _context.Employees.Where(x => x.Id == shiftToReturn.EmployeeId).Single();
+                    shiftToReturn.Title = empName.FirstName + " " + empName.LastName;
+                }
                 else
                 {
+                    // For the database
                     existingHelper.IsCanceled = helpers.IsCanceled;
                     existingHelper.CanceledAt = DateTime.Now;
                     existingHelper.CanceledBy = helpers.CanceledBy;
+
+                    // For response
+                    shiftToReturn.IsCanceled = helpers.IsCanceled;
+                    shiftToReturn.CanceledAt = DateTime.Now;
+                    shiftToReturn.CanceledBy = helpers.CanceledBy;
                 }
                 await _context.SaveChangesAsync(true);
-                return Ok(existingHelper);
+                return Ok(shiftToReturn);
             }
             catch (System.Exception ex)
             {
@@ -179,13 +162,43 @@ namespace WebApi.Controllers
             }
         }
 
-        public Shifts GetShift(Shifts myShift)
+        public ShiftMergedModel GetShift(Shifts myShift)
         {
-            _context.Shifts.Add(myShift);
-            _context.SaveChanges();
-            int id = myShift.Id;
-            var res = _context.Shifts.Where(x => x.Id == id).Single();
-            return res;
+            try
+            {
+                if(myShift.Id == 0)
+                {
+                    _context.Shifts.Add(myShift);
+                    _context.SaveChanges();
+                    int id = myShift.Id;
+                    myShift = _context.Shifts.Where(x => x.Id == id).Single();
+                }
+                var positions = _context.Positions.Where(x => x.Id == myShift.positionId).Single();
+                
+                TimeSpan from = positions.DefaultTime.Value.TimeOfDay;
+                TimeSpan to = positions.DefaultTime2.Value.TimeOfDay;
+
+                ShiftMergedModel shift = new ShiftMergedModel();
+                shift.Id = myShift.Id;
+                shift.EmployeeId = myShift.EmployeeId;
+                shift.OrganizationId = myShift.OrganizationId;
+                shift.ShiftDate = myShift.ShiftDate;
+                shift.PositionId = myShift.positionId;
+                shift.PositionName = positions.DefaultTime.Value.ToString("HH:mm") + " " + positions.Name;
+                shift.Start = myShift.ShiftDate + from;
+                shift.End = myShift.ShiftDate + to;
+                shift.ResourceId = myShift.positionId;
+                shift.Title = "";
+                shift.IsCanceled = myShift.IsCanceled;
+                shift.CanceledBy = myShift.CanceledBy;
+                shift.CanceledAt = myShift.CanceledAt;
+
+                return shift;
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
     }
 }

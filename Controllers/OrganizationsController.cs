@@ -12,24 +12,41 @@ namespace WebApi.Controllers
     public class OrganizationsController : ControllerBase
     {
         private readonly CeaContext _context;
+        // private readonly DataAccess objds;
         public OrganizationsController(CeaContext context)
         {
             _context = context;
+            // objds = d;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
-            var result = _context.Organizations.ToList();
-            return Ok(result);
+            try
+            {
+                // var res = objds.GetOrganizations();
+                var result = _context.Organizations.ToList();
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = "Error is" + ex.Message });
+            }
         }
 
         //[Authorize(Roles = Role.Admin)]
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
-            var result = _context.Organizations.Where(x => x.CategoryId == id).ToList();
-            return Ok(result);
+            try
+            {
+                var result = _context.Organizations.Where(x => x.CategoryId == id).ToList();
+                return Ok(result);
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { message = "Error is" + ex.Message });
+            }
         }
 
         [HttpPost]
@@ -61,8 +78,9 @@ namespace WebApi.Controllers
                 existingHelper.Address = helpers.Address;
                 existingHelper.DressCode = helpers.DressCode;
                 existingHelper.Phone = helpers.Phone;
+                existingHelper.CategoryId = helpers.CategoryId;
                 await _context.SaveChangesAsync(true);
-                return new NoContentResult();
+                return Ok(existingHelper);
             }
             catch (System.Exception ex)
             {

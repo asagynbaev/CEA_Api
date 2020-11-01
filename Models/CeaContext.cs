@@ -11,5 +11,6 @@ namespace WebApi.Models
         public DbSet<HelpersModel> Helpers { get; set; }
         public DbSet<Positions> Positions { get; set; }
         public DbSet<Shifts> Shifts { get; set; }
+        public DbSet<Catering> Catering { get; set; }
     } 
 }
